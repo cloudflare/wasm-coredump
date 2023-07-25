@@ -1,0 +1,10 @@
+name = "test-coredump-worker"
+main = "src/entry.mjs"
+compatibility_date = "2023-03-22"
+
+[[services]]
+binding = "COREDUMP_SERVICE"
+service = "coredump-service"
+
+[build]
+command = "cargo install worker-build && COREDUMP=1 worker-build --dev"

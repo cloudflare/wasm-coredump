@@ -1,0 +1,8 @@
+name = "coredump-service"
+main = "build/worker/shim.mjs"
+compatibility_date = "2023-07-20"
+workers_dev = false
+usage_model = "unbound"
+
+[build]
+command = "cargo install -q worker-build && worker-build --release"

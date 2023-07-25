@@ -1,0 +1,11 @@
+{
+  "name": "@cloudflare/wasm-coredump",
+  "version": "1.0.3",
+  "main": "index.mjs",
+  "type": "module",
+  "author": "Sven Sauleau <sven@cloudflare.com>",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "prettier": "^3.0.0"
+  }
+}

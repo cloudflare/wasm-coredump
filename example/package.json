@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@cloudflare/wasm-coredump": "1.0.3"
+  }
+}

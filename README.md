@@ -41,6 +41,12 @@ main = "src/entry.mjs"
 ...
 ```
 
+Modify the wrangler.toml build command to add core dump support:
+```toml
+[build]
+command = "cargo install worker-build && COREDUMP=1 worker-build --dev"
+```
+
 Now, when a Worker (using the Wasm Coredump Service) crashes you should see in the
 logs:
 

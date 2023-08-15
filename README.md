@@ -1,6 +1,6 @@
 # Wasm Coredump Service
 
-Link to blog post: ...
+Read about [Wasm core dumps and debugging Rust in Cloudflare Workers](https://blog.cloudflare.com/wasm-coredumps/) in our blog to know more.
 
 ## Usage
 

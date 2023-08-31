@@ -17,19 +17,56 @@ Change your Worker's entrypoint to catch crashes and extract a coredump (if any)
 `./src/entry.mjs`:
 ```js
 import shim, { getMemory, wasmModule } from "../build/worker/shim.mjs"
+import { recordCoredump } from "@cloudflare/wasm-coredump"
+
+const timeoutSecs = 60;
 
 async function fetch(request, env, ctx) {
-    try {
-        return shim.fetch(request, env, ctx);
-    } catch (err) {
-      const memory = getMemory();
-      const coredumpService = env.COREDUMP_SERVICE;
-      await recordCoredump({ memory, wasmModule, request, coredumpService });
-      throw err;
-    }
+  try {
+    // see https://github.com/rustwasm/wasm-bindgen/issues/2724.
+    return await Promise.race([
+      shim.fetch(request, env, ctx),
+      new Promise((r, e) => setTimeout(() => e("timeout"), timeoutSecs * 1000))
+    ]);
+  } catch (err) {
+    const memory = getMemory();
+    const coredumpService = env.COREDUMP_SERVICE;
+    await recordCoredump({ memory, wasmModule, request, coredumpService });
+    throw err;
+  }
 }
 
-export default { fetch };
+async function queue(batch, env, ctx) {
+  try {
+    // see https://github.com/rustwasm/wasm-bindgen/issues/2724.
+    return await Promise.race([
+      shim.queue(batch, env, ctx),
+      new Promise((r, e) => setTimeout(() => e("timeout"), timeoutSecs * 1000))
+    ]);
+  } catch (err) {
+    const memory = getMemory();
+    const coredumpService = env.COREDUMP_SERVICE;
+    await recordCoredump({ memory, wasmModule, coredumpService });
+    throw err;
+  }
+}
+
+async function scheduled(event, env, ctx) {
+  try {
+    // see https://github.com/rustwasm/wasm-bindgen/issues/2724.
+    return await Promise.race([
+      shim.scheduled(event, env, ctx),
+      new Promise((r, e) => setTimeout(() => e("timeout"), timeoutSecs * 1000))
+    ]);
+  } catch (err) {
+    const memory = getMemory();
+    const coredumpService = env.COREDUMP_SERVICE;
+    await recordCoredump({ memory, wasmModule, coredumpService });
+    throw err;
+  }
+}
+
+export default { fetch, queue, scheduled };
 ```
 
 Point wrangler to the new Worker entrypoint:

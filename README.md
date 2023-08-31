@@ -26,7 +26,7 @@ async function fetch(request, env, ctx) {
     // see https://github.com/rustwasm/wasm-bindgen/issues/2724.
     return await Promise.race([
       shim.fetch(request, env, ctx),
-      new Promise((r, e) => setTimeout(() => e("timeout"), timeoutSecs * 1000))
+      new Promise((r, e) => setTimeout(() => e(`timeout after ${timeoutSecs}s`), timeoutSecs * 1000))
     ]);
   } catch (err) {
     const memory = getMemory();
@@ -41,7 +41,7 @@ async function queue(batch, env, ctx) {
     // see https://github.com/rustwasm/wasm-bindgen/issues/2724.
     return await Promise.race([
       shim.queue(batch, env, ctx),
-      new Promise((r, e) => setTimeout(() => e("timeout"), timeoutSecs * 1000))
+      new Promise((r, e) => setTimeout(() => e(`timeout after ${timeoutSecs}s`), timeoutSecs * 1000))
     ]);
   } catch (err) {
     const memory = getMemory();
@@ -56,7 +56,7 @@ async function scheduled(event, env, ctx) {
     // see https://github.com/rustwasm/wasm-bindgen/issues/2724.
     return await Promise.race([
       shim.scheduled(event, env, ctx),
-      new Promise((r, e) => setTimeout(() => e("timeout"), timeoutSecs * 1000))
+      new Promise((r, e) => setTimeout(() => e(`timeout after ${timeoutSecs}s`), timeoutSecs * 1000))
     ]);
   } catch (err) {
     const memory = getMemory();

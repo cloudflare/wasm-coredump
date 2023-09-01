@@ -65,7 +65,7 @@ export async function recordCoredump({
     }
 
     // Add eyeball request
-    {
+    if (request) {
       const headers = {};
       for (const [key, value] of request.headers.entries()) {
         headers[key] = value;

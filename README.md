@@ -41,6 +41,12 @@ main = "src/entry.mjs"
 ...
 ```
 
+Make sure wasm-coredump-rewriter is installed
+
+```
+cargo install wasm-coredump-rewriter
+```
+
 Modify the wrangler.toml build command to add core dump support:
 ```toml
 [build]
